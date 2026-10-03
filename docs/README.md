@@ -1,64 +1,36 @@
 # Prompt Studio documentation
 
-Status: **Current**  
-Last verified: **2026-09-19**
+Status: **COMPLETE current-state documentation**. Last verified: **2026-10-03**.
 
-This directory is the current-state knowledge base for Prompt Studio. Source code and configuration remain authoritative if a future change makes a document stale.
-
-## Documentation map
+This knowledge base contains exactly five documents plus this index. Source code takes precedence over configuration, actual validation results, and prose when they conflict. `VERIFIED`, `INFERRED`, `UNKNOWN`, `NOT VERIFIED`, and `NOT APPLICABLE` distinguish observed behavior from missing evidence.
 
 | Document | Purpose | Audience | Status |
 | --- | --- | --- | --- |
-| [01-idea.md](01-idea.md) | Observed product purpose, users, scope, and constraints | Everyone | Complete |
-| [02-requirements.md](02-requirements.md) | Reconstructed functional and non-functional requirements | Product, engineering | Complete |
-| [03-prd.md](03-prd.md) | Current-state product requirements and journeys | Product, engineering | Complete |
-| [04-features.md](04-features.md) | Feature behavior, failure cases, and source locations | Product, QA, engineering | Complete |
-| [05-architecture.md](05-architecture.md) | System boundaries, components, runtime, and concerns | Engineering, AI agents | Complete |
-| [06-technical-design.md](06-technical-design.md) | Module-level implementation design | Engineering, AI agents | Complete |
-| [09-security.md](09-security.md) | Security boundary, local data, dependencies, and risks | Engineering, security | Complete |
-| [10-testing-strategy.md](10-testing-strategy.md) | Current validation facilities and testing gaps | Engineering, QA | Complete |
-| [11-deployment.md](11-deployment.md) | Verified build output and static-hosting requirements | Engineering, operations | Complete |
-| [13-troubleshooting.md](13-troubleshooting.md) | Reproducible setup, build, asset, and browser issues | Engineering, support | Complete |
-| [14-developer-guide.md](14-developer-guide.md) | Contributor setup and safe change workflow | Developers, AI agents | Complete |
-| [15-user-guide.md](15-user-guide.md) | End-user workflows, shortcuts, privacy, and limitations | End users | Complete |
-| [16-integrations.md](16-integrations.md) | Runtime CDN and same-origin asset dependencies | Engineering, operations | Complete |
-| [17-configuration.md](17-configuration.md) | Config files, defaults, hard-coded options, and absence of environment variables | Engineering | Complete |
-| [18-data-flow.md](18-data-flow.md) | Template loading, generation, persistence, and clipboard flows | Engineering, AI agents | Complete |
-| [19-glossary.md](19-glossary.md) | Product and implementation terminology | Everyone, AI agents | Complete |
-| [DECISIONS.md](DECISIONS.md) | Observed architectural and technical decisions | Engineering, AI agents | Complete |
-| [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md) | Information not recoverable from the repository | Product, engineering | Complete |
-| [AI-CONTEXT.md](AI-CONTEXT.md) | Compact continuation guide for future AI agents | AI agents | Complete |
-| [decisions/ADR-001-static-browser-application.md](decisions/ADR-001-static-browser-application.md) | Client-only runtime decision | Engineering | Complete |
-| [decisions/ADR-002-file-backed-template-system.md](decisions/ADR-002-file-backed-template-system.md) | Markdown template and JSON schema decision | Engineering | Complete |
-| [decisions/ADR-003-browser-local-persistence.md](decisions/ADR-003-browser-local-persistence.md) | Browser-local persistence decision | Engineering | Complete |
+| [01-overview.md](01-overview.md) | Product purpose, requirements/PRD, feature reference, catalog, glossary | Everyone | Complete |
+| [02-user-guide.md](02-user-guide.md) | End-user workflows, preferences, errors, limitations, FAQ | Users / product | Complete |
+| [03-architecture.md](03-architecture.md) | Architecture, technical design, persistence, API applicability, security, integrations, data flow | Developers / AI | Complete |
+| [04-development.md](04-development.md) | Setup, contribution, validation, deployment, operations, troubleshooting, configuration | Developers / operations / AI | Complete |
+| [05-decisions.md](05-decisions.md) | Inline ADRs, open questions, risks, AI constraints | Developers / architects / AI | Complete |
 
-## Intentionally not applicable
+Start with overview/user guide for product use, or architecture/development/decisions for engineering continuation.
 
-| Expected topic | Status | Reason |
-| --- | --- | --- |
-| `07-database-design.md` | **NOT APPLICABLE** | The application has no database, models, migrations, repositories, or server persistence. Browser `localStorage` is covered in architecture and data flow. |
-| `08-api-design.md` / OpenAPI | **NOT APPLICABLE** | The application exposes and consumes no application API. Its `fetch()` calls retrieve static, same-origin `.md` and `.json` assets. |
-| `12-operations.md` | **NOT APPLICABLE** | There is no application server, job runner, scheduler, queue, health endpoint, logging pipeline, backup process, or monitoring configuration in the repository. Static-host operations are provider-specific and unknown. |
+## Applicability
 
-## Evidence hierarchy
+| Topic | Status and location |
+| --- | --- |
+| Database schema, migrations, seeds | **NOT APPLICABLE**: no database. Browser-state design is in architecture. |
+| Application API / OpenAPI | **NOT APPLICABLE**: fetch retrieves static assets only; architecture explains the boundary. |
+| Authentication, server jobs, queues | **NOT APPLICABLE**: no backend runtime. |
+| Docker and CI/CD | **NOT APPLICABLE to current repository**: no corresponding configuration; development records the absence. |
+| Static deployment | Applicable; artifact/build verified. Real provider and release process **UNKNOWN**. |
+| Runtime security and operations | Browser/resource trust is applicable; no app monitoring or backup service is configured. |
 
-This documentation applies the following precedence when sources disagree:
+No separate API, database, security, testing, operations, glossary, AI-context, or ADR files are retained.
 
-1. `src/` and `public/`
-2. Build and TypeScript configuration
-3. Validation results
-4. Root `README.md`
+## Audit and consolidation
 
-The documentation audit found one stale root README claim about an original `/prompts` directory. The directory does not exist in the audited repository; the README was corrected during this documentation update.
+The audit inspected source modules, configuration/dependency manifests, runtime assets, entry points, existing documents, and production build. Legacy index/root links used nonexistent filenames and related product/technical material overlapped. Useful content and three separate ADRs were merged into their owning documents; superseded files were removed under the requested fixed format. Links now target this set.
 
-## Documentation audit summary
+Documentation describes the final six-category, 22-template catalog and distinguishes prompt instructions from executable app behavior. Unknown production details remain unknown. Validation evidence/limits live in [development](04-development.md#testing-and-validation); risks/decisions in [decisions](05-decisions.md).
 
-| Audited item | Finding | Action |
-| --- | --- | --- |
-| Root `README.md` | Setup, scripts, feature list, and template authoring guidance matched the implementation after the `.md` conversion. Its project tree and final note referenced a nonexistent root `/prompts` directory. | Retained and corrected; added links to this knowledge base. |
-| Existing `docs/` or `ai-docs/` | Neither directory existed. | Created the smallest relevant current-state set listed above. |
-| Database/API/operations docs | No corresponding application components exist. | Marked not applicable instead of creating empty documents. |
-| Source/configuration coverage | UI, catalog, type contracts, parser, generator, loader, styles, public assets, dependency manifests, TypeScript config, and build output were inspected. | Reflected across architecture, technical design, configuration, and data-flow docs. |
-| Test/deployment/infrastructure docs | No tests, CI/CD, containers, deployment provider, or infrastructure configuration existed. | Documented verified commands and unknowns without inventing infrastructure. |
-
-No pre-existing documentation was duplicated or replaced.
+**DOCUMENTATION STATUS: COMPLETE**

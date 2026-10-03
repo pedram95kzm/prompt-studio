@@ -1,0 +1,46 @@
+{
+  "goal": {
+    "required": true,
+    "label": "What would you like to understand?",
+    "type": "textarea",
+    "description": "Start with your question. The AI will ask follow-ups suited to your situation.",
+    "placeholder": "My personality in relationships, readiness to date, or fit with a particular person…"
+  },
+  "relationship_context": {
+    "required": true,
+    "label": "What is your relationship situation?",
+    "type": "text",
+    "placeholder": "Single, getting to know someone, in a relationship, or reflecting after a breakup…"
+  },
+  "self_description": {
+    "required": true,
+    "label": "How do you act in closeness or disagreement?",
+    "type": "textarea",
+    "placeholder": "Describe your usual reactions, ideally with one short example…"
+  },
+  "relationship_values": {
+    "required": true,
+    "label": "What do you value and need in a relationship?",
+    "type": "textarea",
+    "placeholder": "What helps you feel respected, comfortable, and connected? 'Not sure yet' is okay."
+  },
+  "patterns": {
+    "required": false,
+    "label": "Recurring patterns or examples",
+    "type": "textarea",
+    "placeholder": "Optional: a pattern you want to understand or an interaction that stood out…"
+  },
+  "partner_context": {
+    "required": false,
+    "label": "Context about a particular person",
+    "type": "textarea",
+    "description": "Describe observed behavior without names or identifying details.",
+    "placeholder": "Optional: shared values, recurring disagreements, or how you communicate…"
+  },
+  "boundaries": {
+    "required": false,
+    "label": "Topics to avoid or boundaries",
+    "type": "textarea",
+    "placeholder": "Optional: anything you would prefer not to discuss…"
+  }
+}

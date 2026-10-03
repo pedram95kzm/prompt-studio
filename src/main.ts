@@ -22,6 +22,7 @@ const icons = {
   moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.5 15.3A9 9 0 0 1 8.7 3.5 9 9 0 1 0 20.5 15.3Z"/></svg>',
   sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
   code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m8 9-3 3 3 3m8-6 3 3-3 3m-2-9-4 12"/></svg>',
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5.5C9 3.5 5 3.5 2 5v14c3-1.5 7-1.5 10 .5 3-2 7-2 10-.5V5c-3-1.5-7-1.5-10 .5Zm0 0v14"/></svg>',
   mind: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9.5 4.5A3.5 3.5 0 0 0 6 8v.3A3.6 3.6 0 0 0 4 11.5c0 1.2.6 2.3 1.5 3A3.5 3.5 0 0 0 9 19h1V5.5a2 2 0 0 0-.5-1Zm5 0A3.5 3.5 0 0 1 18 8v.3a3.6 3.6 0 0 1 2 3.2c0 1.2-.6 2.3-1.5 3A3.5 3.5 0 0 1 15 19h-1V5.5a2 2 0 0 1 .5-1Z"/><path d="M6 8.5h2m8 0h2M5.5 14H8m8 0h2.5"/></svg>',
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></svg>',
   film: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9h4m10 0h4M3 15h4m10 0h4"/></svg>',
@@ -218,6 +219,12 @@ const elements = {
 };
 
 function colorClasses(category: Category): { icon: string; active: string } {
+  if (category.color === 'green') {
+    return { icon: 'bg-[#e6f4eb] text-[#28774d] dark:bg-[#213d2d] dark:text-[#8ad0a7]', active: 'bg-[#edf8f0] dark:bg-[#203729]' };
+  }
+  if (category.color === 'cyan') {
+    return { icon: 'bg-[#e4f4f8] text-[#28788c] dark:bg-[#203b43] dark:text-[#8bcbdc]', active: 'bg-[#edf8fb] dark:bg-[#20333b]' };
+  }
   if (category.color === 'violet') {
     return { icon: 'bg-[#f0edfb] text-[#6858b8] dark:bg-[#30294c] dark:text-[#aea2ee]', active: 'bg-[#f4f1fc] dark:bg-[#29233e]' };
   }

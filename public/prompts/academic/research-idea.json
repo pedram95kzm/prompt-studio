@@ -1,0 +1,33 @@
+{
+  "topic": {
+    "required": true,
+    "label": "What is your broad research topic?",
+    "type": "text",
+    "description": "The AI will ask questions appropriate to this topic before developing research ideas.",
+    "placeholder": "Educational technology, Persian literature, machine learning, urban design…"
+  },
+  "academic_context": {
+    "required": false,
+    "label": "Academic level and deliverable",
+    "type": "text",
+    "placeholder": "Optional: undergraduate project, master's thesis, doctoral proposal, paper…"
+  },
+  "interests": {
+    "required": false,
+    "label": "Interests and prior work",
+    "type": "textarea",
+    "placeholder": "Optional: a narrower interest, observed problem, or papers you have read…"
+  },
+  "resources": {
+    "required": false,
+    "label": "Available data and resources",
+    "type": "textarea",
+    "placeholder": "Optional: datasets, texts, equipment, skills, access, or supervision…"
+  },
+  "constraints": {
+    "required": false,
+    "label": "Requirements and constraints",
+    "type": "textarea",
+    "placeholder": "Optional: timeframe, budget, allowed methods, or institutional requirements…"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "payments": {
+    "required": true,
+    "label": "Who paid how much?",
+    "type": "textarea",
+    "description": "List every participant, including anyone who paid zero. Enter expenses, not repayments.",
+    "placeholder": "Ali: 600000\nSara: 300000\nReza: 0"
+  },
+  "currency": {
+    "required": false,
+    "label": "Currency and rounding unit",
+    "type": "text",
+    "placeholder": "Optional: tomans, rounded to 1 toman; USD, to 1 cent…"
+  },
+  "sharing_rules": {
+    "required": false,
+    "label": "Sharing rules",
+    "type": "textarea",
+    "description": "Leave blank for equal shares among everyone listed.",
+    "placeholder": "Optional: unequal shares or an expense shared by only some people…"
+  },
+  "previous_transfers": {
+    "required": false,
+    "label": "Repayments already made",
+    "type": "textarea",
+    "placeholder": "Optional: Reza already sent Ali 100000 tomans…"
+  },
+  "transfer_constraints": {
+    "required": false,
+    "label": "Transfer restrictions",
+    "type": "textarea",
+    "placeholder": "Optional: people who cannot transfer directly to each other…"
+  }
+}

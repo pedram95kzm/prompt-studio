@@ -1,0 +1,32 @@
+{
+  "goal": {
+    "required": true,
+    "label": "Subject and learning goal",
+    "type": "textarea",
+    "placeholder": "What do you want to learn or prepare for?"
+  },
+  "current_level": {
+    "required": true,
+    "label": "Current level and difficulties",
+    "type": "textarea",
+    "placeholder": "What can you already do, and where do you get stuck?"
+  },
+  "schedule": {
+    "required": true,
+    "label": "Time available and target date",
+    "type": "text",
+    "placeholder": "4 hours per week for 6 weeks; exam on a specific date…"
+  },
+  "materials": {
+    "required": false,
+    "label": "Materials and assessment",
+    "type": "textarea",
+    "placeholder": "Optional: syllabus, books, course resources, or exam format…"
+  },
+  "constraints": {
+    "required": false,
+    "label": "Preferences and constraints",
+    "type": "textarea",
+    "placeholder": "Optional: session length, access needs, tools, or other commitments…"
+  }
+}

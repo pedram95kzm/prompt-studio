@@ -1,0 +1,32 @@
+{
+  "situation": {
+    "required": true,
+    "label": "What is the situation?",
+    "type": "textarea",
+    "placeholder": "Describe the relationship and what happened, without identifying details…"
+  },
+  "difficulty": {
+    "required": true,
+    "label": "What feels uncomfortable or difficult?",
+    "type": "textarea",
+    "placeholder": "What happens, and how does it affect you?"
+  },
+  "needs": {
+    "required": false,
+    "label": "What would you like to protect or change?",
+    "type": "textarea",
+    "placeholder": "Optional: time, privacy, respect, rest, independence, or another need…"
+  },
+  "previous_attempts": {
+    "required": false,
+    "label": "What have you already tried?",
+    "type": "textarea",
+    "placeholder": "Optional: a request you made and how the other person responded…"
+  },
+  "constraints": {
+    "required": false,
+    "label": "Constraints and safety concerns",
+    "type": "textarea",
+    "placeholder": "Optional: dependence, power differences, possible retaliation, or limits on your choices…"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "topic": {
+    "required": true,
+    "label": "What is the broad topic?",
+    "type": "text",
+    "description": "Start with one topic. The generated prompt asks the AI to choose relevant follow-up questions.",
+    "placeholder": "A small business, educational content, a community event, an app…"
+  },
+  "desired_outcome": {
+    "required": false,
+    "label": "What would you like to create or solve?",
+    "type": "textarea",
+    "placeholder": "Optional: what a useful idea should help you achieve…"
+  },
+  "background": {
+    "required": false,
+    "label": "Your background and resources",
+    "type": "textarea",
+    "placeholder": "Optional: interests, skills, audience access, tools, or experience…"
+  },
+  "constraints": {
+    "required": false,
+    "label": "Constraints and preferences",
+    "type": "textarea",
+    "placeholder": "Optional: time, budget, scale, or directions to avoid…"
+  }
+}

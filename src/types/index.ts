@@ -23,8 +23,8 @@ export interface Category {
   id: string;
   title: string;
   description: string;
-  icon: 'code' | 'mind' | 'home' | 'film';
-  color: 'blue' | 'violet' | 'amber' | 'rose';
+  icon: 'code' | 'sparkles' | 'book' | 'mind' | 'home' | 'film';
+  color: 'blue' | 'green' | 'cyan' | 'violet' | 'amber' | 'rose';
   templates: Template[];
 }
 

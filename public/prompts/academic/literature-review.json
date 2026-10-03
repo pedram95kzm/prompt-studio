@@ -1,0 +1,33 @@
+{
+  "question": {
+    "required": true,
+    "label": "Topic or research question",
+    "type": "textarea",
+    "placeholder": "What question should the literature review help answer?"
+  },
+  "scope": {
+    "required": false,
+    "label": "Purpose and scope",
+    "type": "textarea",
+    "placeholder": "Optional: thesis background, exploratory review, proposal, or systematic-review plan…"
+  },
+  "sources": {
+    "required": false,
+    "label": "Sources and notes",
+    "type": "textarea",
+    "description": "Without accessible sources, the prompt produces a review plan rather than claimed findings.",
+    "placeholder": "Optional: references, abstracts, excerpts, links, or your reading notes…"
+  },
+  "boundaries": {
+    "required": false,
+    "label": "Evidence boundaries",
+    "type": "textarea",
+    "placeholder": "Optional: discipline, date range, language, population, or exclusions…"
+  },
+  "output_requirements": {
+    "required": false,
+    "label": "Output and citation requirements",
+    "type": "text",
+    "placeholder": "Optional: thematic outline, evidence table, APA, IEEE, or another format…"
+  }
+}

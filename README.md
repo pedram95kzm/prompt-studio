@@ -6,7 +6,9 @@ The application runs entirely in the browser. It does not call an AI API, requir
 
 ## Highlights
 
-- Curated templates for software engineering, structured reflection, interior design, and cinema recommendations
+- Curated templates for software engineering, everyday tasks, academic work, structured reflection, interior design, and cinema recommendations
+- Shared-expense settlement prompts that require verification of the minimum transfer count
+- Idea discovery and personality/relationship exploration with context-appropriate follow-up questions
 - High-quality instructions with explicit roles, guardrails, workflows, and output contracts
 - Dynamic forms generated from adjacent JSON schemas
 - Required-field validation and automatic removal of unused optional lines
@@ -43,7 +45,16 @@ Prompt Studio performs deterministic text generation only. The resulting prompt 
 
 ## Template catalog
 
-The catalog is maintained in `src/data/catalog.ts` and displayed in the app. It includes guided workflows for coding, psychology, decoration, and cinema, with dedicated cinema recommenders for movies and series.
+The catalog is maintained in `src/data/catalog.ts` and displayed in the app. It contains 22 templates in six collections:
+
+- **Coding:** debugging, features, tests, refactoring, and documentation.
+- **General:** shared-expense settlement and topic-driven idea discovery.
+- **Academic:** research ideas, study plans, and literature reviews.
+- **Psychology:** personality/relationship reflection, personal boundaries, thoughts, decisions, habits, and conversations.
+- **Decoration:** rooms, palettes, small spaces, and lighting.
+- **Cinema:** separate movie and series recommenders.
+
+Adaptive questions and expense calculations are instructions for the external AI tool where the user runs the prompt. Prompt Studio collects the starting context and constructs text locally; it does not itself conduct an interview or compute a settlement.
 
 The psychology templates provide general reflection and communication exercises. They are not a substitute for diagnosis, treatment, crisis support, or professional care.
 
@@ -130,7 +141,7 @@ Strong templates in this project should:
 
 - define the expert role and desired outcome;
 - distinguish required inputs from optional context;
-- ask questions only when missing information is genuinely blocking;
+- ask focused questions when useful, and for interview workflows explicitly adapt questions to the topic and previous answers, wait for replies, and avoid endless questioning;
 - include domain-specific safety and accuracy guardrails;
 - define a practical method without requesting hidden reasoning;
 - specify the expected deliverable or response structure;
@@ -155,11 +166,11 @@ Tailwind CSS and Google Fonts are loaded from third-party CDNs at runtime; those
 
 Start with [the documentation index](docs/README.md). Important references include:
 
-- [Architecture](docs/05-architecture.md)
-- [Technical design](docs/06-technical-design.md)
-- [Security and privacy](docs/09-security.md)
-- [Developer guide](docs/14-developer-guide.md)
-- [User guide](docs/15-user-guide.md)
+- [Overview, requirements, and catalog](docs/01-overview.md)
+- [User guide](docs/02-user-guide.md)
+- [Architecture, technical design, and security](docs/03-architecture.md)
+- [Development, testing, and deployment](docs/04-development.md)
+- [Decisions, risks, and AI constraints](docs/05-decisions.md)
 
 ## License
 
