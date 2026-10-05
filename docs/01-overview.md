@@ -1,6 +1,6 @@
 # Prompt Studio: product overview
 
-Status: **VERIFIED current implementation**, except explicitly labeled inferences and unknowns. Last verified: **2026-10-03**.
+Status: **VERIFIED current implementation**, except explicitly labeled inferences and unknowns. Last verified: **2026-10-05**.
 
 ## Purpose and scope
 
@@ -18,13 +18,13 @@ The core value is reusable, provider-neutral prompt construction with explicit c
 
 | Category | Template ID | Purpose |
 | --- | --- | --- |
+| General | `split-expenses` | Request exact shared-expense balances and a minimum-transfer settlement, with verification of optimality. |
+| General | `idea-discovery` | Explore a broad topic through tailored questions and develop practical ideas. |
 | Coding | `debug` | Investigate an issue and request a focused repair. |
 | Coding | `add-feature` | Plan and implement an existing-project feature. |
 | Coding | `generate-tests` | Request behavior-focused tests. |
 | Coding | `refactor` | Audit and improve an existing repository. |
 | Coding | `generate-docs` | Document an existing system from evidence. |
-| General | `split-expenses` | Request exact shared-expense balances and a minimum-transfer settlement, with verification of optimality. |
-| General | `idea-discovery` | Explore a broad topic through tailored questions and develop practical ideas. |
 | Academic | `research-idea` | Narrow a broad research topic into feasible questions and a proposal outline. |
 | Academic | `study-plan` | Build a realistic study schedule from goals, starting level, and available time. |
 | Academic | `literature-review` | Plan a review or synthesize available sources without invented evidence. |
@@ -53,7 +53,7 @@ Priorities are **INFERRED** from the primary journey, not historical product com
 | Core | Reject unmatched placeholder/schema keys and render labeled fields from valid schemas. | `src/utils/parser.ts`; `createField()` in `src/main.ts`. |
 | Core | Reject blank required fields; construct plain text from supplied values and optional-line rules. | `src/utils/generator.ts`. |
 | Core | Append the selected response-language instruction and preview/copy output. | Generator; `renderPreview()` and copy handler. |
-| Supporting | Search the active category, show readiness/loading/errors, retry asset failures, and reset fields. | `src/main.ts`. |
+| Supporting | Search the active category, show loading/errors, retry asset failures, and reset fields. | `src/main.ts`. |
 | Supporting | Restore selections, theme, language, and per-template inputs in the same browser. | `StoredState`; persistence handlers. |
 | Supporting | Support responsive layout, dark mode, keyboard shortcuts, and Persian/Arabic preview direction. | `src/main.ts`, `src/style.css`, `index.html`. |
 
@@ -66,21 +66,21 @@ All runtime features serve the end user and require no account or application ro
 | Feature / purpose | Trigger and preconditions | Inputs → main flow → outputs | Alternative/failure behavior | Dependencies, permissions, source |
 | --- | --- | --- | --- | --- |
 | Selection: choose a workflow | Startup or navigation click; compiled catalog exists | IDs → select entry and load assets → active navigation/form | Same selection is ignored; asset errors have retry | Catalog and loader; no permission; `src/main.ts`, `src/data/catalog.ts` |
-| Search: narrow choices | Search input or `/`; active category | Query → case-insensitive title/description/tag filtering → cards | Empty query lists category; no match shows empty state | No service/permission; `filteredTemplates()` |
+| Search: narrow choices | Search input or `/`; active category | Query → case-insensitive title/description/tag filtering → compact template list | Empty query lists category; no match shows empty state | No service/permission; `filteredTemplates()` |
 | Asset loading: retrieve instructions and form | Selected template; paths registered | Asset URLs → concurrent GETs and key validation → cached content/schema | HTTP/JSON/key mismatch → visible error; manual retry | Same-origin host; no auth; `src/utils/loader.ts`, `src/utils/parser.ts` |
-| Form/readiness: collect context | Successful load | Ordered schema and saved values → text/textarea controls → field values and completion percentage | Loading skeleton, retry state, inline errors | DOM; no permission; `createField()`, `renderForm()`, `updateCompletion()` |
+| Form: collect context | Successful load | Schema and saved values → required text/textarea controls and collapsible optional context → field values | Loading placeholder, retry state, inline errors | DOM; no permission; `createField()`, `renderForm()` |
 | Generation: construct a prompt | Submit or Ctrl/Cmd+Enter; loaded assets | Values/language → validation and substitution → plain text | Missing required values focus first invalid field; no new prompt | Local generator; no remote permission; `src/utils/generator.ts`, submit handler |
-| Language/preview: prepare usable output | Language change or successful generation | Language/output → instruction, direction, character count → preview | Language change clears output; empty preview disables Copy | No remote dependency; `renderPreview()`, generator |
+| Language/preview: prepare usable output | Language change or successful generation | Language/output → instruction and direction → plain-text preview | Language or input changes clear output; empty preview disables Copy | No remote dependency; `renderPreview()`, generator |
 | Copy: transfer text | Copy click; output exists | Output → Clipboard API → clipboard/toast | Legacy copy fallback; failure asks for manual selection | Browser clipboard policy; copy handler |
 | Resume/reset: retain or clear form work | Input/selection changes, reload, Reset | Stored selections/values ↔ runtime state; Reset clears active values | Corrupt JSON ignored; storage/shape failures not fully handled | Browser localStorage; `readStoredState()`, `persist()`, reset handler |
-| Appearance/feedback: usable layout | Theme click, viewport, action result | Preference/action → classes/toasts/responsive layout | External style/font failure can degrade display | Tailwind/Google Fonts; `src/main.ts`, `src/style.css`, `index.html` |
+| Appearance/feedback: usable layout | Theme click, viewport, action result | Preference/action → neutral light/dark themes, toasts, responsive layout | Mobile template list collapses into a selector | Bundled CSS and system fonts; `src/main.ts`, `src/style.css`, `index.html` |
 
 ## Non-functional characteristics
 
 | Area | Observed behavior | Limits / unknown targets |
 | --- | --- | --- |
 | Performance | Lazy template loading and page-session cache; synchronous generation. | No benchmark, bundle budget, or latency SLA. |
-| Security/privacy | Local construction; generated user content rendered as text. | Retained inputs and third-party scripts require the boundaries described in [architecture](03-architecture.md#security). |
+| Security/privacy | Local construction; generated user content rendered as text. | Retained inputs require the boundaries described in [architecture](03-architecture.md#security). |
 | Availability/reliability | Static build, visible load errors, manual retry. | No offline mode, automatic retry, availability SLA, or verified production host. |
 | Scalability | No application server or shared state; static assets can be served independently. | No capacity/load test; catalog/UI size grows with entries. |
 | Maintainability | Strict TypeScript and separate catalog/parser/loader/generator modules. | UI/state responsibilities concentrated in one module; no CI/test framework. |

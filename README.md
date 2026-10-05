@@ -11,6 +11,7 @@ The application runs entirely in the browser. It does not call an AI API, requir
 - Idea discovery and personality/relationship exploration with context-appropriate follow-up questions
 - High-quality instructions with explicit roles, guardrails, workflows, and output contracts
 - Dynamic forms generated from adjacent JSON schemas
+- Minimal layout with compact template navigation and collapsible optional context
 - Required-field validation and automatic removal of unused optional lines
 - English, Persian, Arabic, Spanish, French, and German response instructions
 - RTL-aware output for Persian and Arabic
@@ -23,7 +24,6 @@ Requirements:
 
 - Node.js 20.19+ or 22.12+
 - npm
-- Internet access at runtime for Tailwind CSS and Google Fonts
 
 ```bash
 npm install
@@ -47,8 +47,8 @@ Prompt Studio performs deterministic text generation only. The resulting prompt 
 
 The catalog is maintained in `src/data/catalog.ts` and displayed in the app. It contains 22 templates in six collections:
 
-- **Coding:** debugging, features, tests, refactoring, and documentation.
 - **General:** shared-expense settlement and topic-driven idea discovery.
+- **Coding:** debugging, features, tests, refactoring, and documentation.
 - **Academic:** research ideas, study plans, and literature reviews.
 - **Psychology:** personality/relationship reflection, personal boundaries, thoughts, decisions, habits, and conversations.
 - **Decoration:** rooms, palettes, small spaces, and lighting.
@@ -82,9 +82,9 @@ src/
   utils/loader.ts    Asset loading, schema checks, and caching
   utils/parser.ts    Placeholder extraction and key comparison
   main.ts            UI, state, rendering, and event handling
-  style.css          Custom styles layered over Tailwind
+  style.css          Bundled responsive styles and light/dark themes
 docs/                 Product and engineering documentation
-index.html            Application shell and Tailwind configuration
+index.html            Application shell and module entry
 ```
 
 ## Template format
@@ -122,7 +122,7 @@ Optional placeholders should normally remain on their own line. When an optional
 }
 ```
 
-Supported field types are `text` and `textarea`. Schema property order determines form-field order.
+Supported field types are `text` and `textarea`. Required fields appear first; optional fields are grouped under **More context**. Schema property order is preserved within each group.
 
 ## Add or edit a template
 
@@ -160,7 +160,7 @@ Deploy the generated `dist/` directory to a static host at the origin root. The 
 
 Prompt content is generated locally, but entered values are automatically stored unencrypted in browser `localStorage` under `prompt-studio-state-v1`. Reset clears only the active template. Avoid entering sensitive information on a shared browser or device.
 
-Tailwind CSS and Google Fonts are loaded from third-party CDNs at runtime; those providers receive ordinary web-request metadata, not prompt form values.
+Styles are bundled with the app, and typography uses system fonts. No third-party styling or font requests are made at runtime.
 
 ## Documentation
 

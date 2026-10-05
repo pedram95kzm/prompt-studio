@@ -1,6 +1,6 @@
 # Architecture and technical design
 
-Status: **VERIFIED current state**; inferred rationale is identified separately. Last verified: **2026-10-03**.
+Status: **VERIFIED current state**; inferred rationale is identified separately. Last verified: **2026-10-05**.
 
 ## Observed architecture
 
@@ -10,8 +10,6 @@ The application is a static, client-only SPA using vanilla TypeScript and direct
 flowchart LR
     User[User] --> Browser[Prompt Studio in browser]
     Host[Static host: shell and prompt assets] --> Browser
-    Tailwind[Tailwind CDN JavaScript] --> Browser
-    Fonts[Google Fonts CSS and fonts] --> Browser
     Browser <--> Storage[Origin-local localStorage]
     Browser --> Clipboard[System clipboard]
     Clipboard -->|User pastes| AI[External AI tool]
@@ -23,17 +21,17 @@ The AI tool is outside the application's runtime boundary. All expense optimizat
 
 | Module | Responsibility / important contract |
 | --- | --- |
-| `index.html` | Mount point, ES module entry, inline Tailwind configuration. |
+| `index.html` | Mount point, metadata, and ES module entry. |
 | `src/main.ts` | Mutable `AppState`, shell markup, render functions, event delegation, persistence, clipboard, shortcuts. |
 | `src/data/catalog.ts` | `Category[]`; display metadata, tags, unique IDs, root-absolute asset URLs. |
 | `src/types/index.ts` | `Category`, `Template`, `Placeholder`, `PlaceholderSchema`, `UserInput`, `LoadedTemplate`, `StoredState`, generation/error types. |
 | `src/utils/parser.ts` | Extract distinct tokens and compare schema/token key sets. |
 | `src/utils/loader.ts` | Concurrent asset fetch, response/JSON/key checks, page-session cache. |
 | `src/utils/generator.ts` | Required-field validation, replacement, optional-line removal, cleanup, language suffix. |
-| `src/style.css` | Custom controls/surfaces, dark and reduced-motion styles, font import. |
+| `src/style.css` | Bundled responsive controls/layout, light/dark color variables, system typography, and reduced-motion styles. |
 | `public/prompts/` | Trusted prompt wording and adjacent field schemas; inventory in [overview](01-overview.md#current-catalog). |
 
-`Template` has `id`, `title`, `description`, `tags`, `templatePath`, and `schemaPath`. `Category` adds visual metadata and a template array. `LoadedTemplate` is `{ content, schema }`. `UserInput` maps placeholder keys to strings. A `Placeholder` requires `required: boolean`, `label: string`, and `type: 'text' | 'textarea'`; optional `description` and `placeholder` supply help/hints. JSON property order determines field order. Runtime JSON is cast to these contracts rather than structurally validated.
+`Template` has `id`, `title`, `description`, `tags`, `templatePath`, and `schemaPath`. `Category` includes legacy visual metadata and a template array; navigation currently uses its title. `LoadedTemplate` is `{ content, schema }`. `UserInput` maps placeholder keys to strings. A `Placeholder` requires `required: boolean`, `label: string`, and `type: 'text' | 'textarea'`; optional `description` and `placeholder` supply help/hints. Required fields appear first, with optional fields under a disclosure; JSON property order is preserved within each group. Runtime JSON is cast to these contracts rather than structurally validated.
 
 The direct development dependencies are TypeScript **5.9.2** and Vite **7.1.5** in the lockfile. npm lockfile v3 pins transitive/platform packages. There is no UI framework or production npm runtime dependency.
 
@@ -75,7 +73,7 @@ These safeguards are wording, not enforced model behavior. No new conversational
 
 ## State, persistence, and concurrency
 
-One module-scoped `AppState` contains category/template, loaded pair, per-template inputs, errors, language/theme, output, search query, loading flag, and load error. Explicit region renderers update categories, templates, form, preview, and theme. Form input events update values and readiness, then synchronously persist the complete stored payload without debouncing.
+One module-scoped `AppState` contains category/template, loaded pair, per-template inputs, errors, language/theme, output, search query, loading flag, and load error. Explicit region renderers update categories, templates, form, preview, and theme. Form input events update values, clear any generated output, and synchronously persist the complete stored payload without debouncing.
 
 Persistence is browser `localStorage`, key **`prompt-studio-state-v1`**:
 
@@ -98,11 +96,11 @@ Read failures/corrupt JSON fall back to `{}`. Catalog IDs and language resolve t
 | Select template | Cleared | Preserved per ID | Query preserved; errors cleared |
 | Select category | Cleared | Preserved | Query/errors cleared; first template selected |
 | Change language | Cleared | Preserved | Query/errors preserved |
-| Edit input | Existing output retained | Active field updated | That field's error cleared when nonblank |
+| Edit input | Cleared; Copy disabled | Active field updated | That field's error cleared when nonblank |
 | Reset | Cleared | Active template cleared | Query preserved; errors cleared |
 | Reload | Empty | Restored | Query/errors not restored |
 
-Fetching is asynchronous, UI generation/storage writes are synchronous, and toast removal uses a timer. No background jobs, queues, scheduled processing, app event bus, or worker concurrency exists: **NOT APPLICABLE**. Rapid selections are not guarded by a request ID or abort; an older load can overwrite the current loaded pair.
+Fetching is asynchronous, UI generation/storage writes are synchronous, and toast removal uses a timer. No background jobs, queues, scheduled processing, app event bus, or worker concurrency exists: **NOT APPLICABLE**. A monotonically increasing request ID prevents older template loads or errors from replacing the latest selection; requests are not aborted.
 
 ## Error handling and observability
 
@@ -111,11 +109,11 @@ Asset HTTP/JSON/parity errors render a visible message and retry button. Require
 ## Security
 
 - Authentication, authorization, roles, sessions, tokens, secrets, server-side CSRF protections, and application rate limiting: **NOT APPLICABLE**; there is no restricted/server API surface.
-- User values go into DOM `.value` and preview `.textContent`. Trusted catalog/schema strings and load-error details sometimes enter `innerHTML`; untrusted authoring would introduce a different security boundary.
+- User values go into DOM `.value` and preview `.textContent`. Catalog/schema labels and load-error details are rendered through text APIs; `innerHTML` is used for fixed application markup and icons.
 - Validation enforces required presence and token parity only. Stored state and field shape are not runtime-validated; prompt content does not receive instruction-injection filtering.
 - Inputs may include code, financial details, research excerpts, or relationship reflections. Stored values are clear-text origin-local data, readable by same-origin scripts; app-level encryption at rest is absent. Output is copied only through the user-triggered copy handler.
-- Tailwind's remote JavaScript runs with page privileges. `index.html` specifies no SRI or CSP. Transport encryption, HSTS, framing/MIME/referrer headers, static-host rate limits, and actual CORS policy are host responsibilities and **UNKNOWN**.
-- The repository sends no form values to a backend. Ordinary asset/font requests still expose web-request metadata to their providers. This is not a guarantee against a compromised same-origin or third-party script.
+- Runtime CSS is bundled and fonts come from the system; no third-party styling scripts or font requests are used. Transport encryption, CSP, HSTS, framing/MIME/referrer headers, static-host rate limits, and actual CORS policy are host responsibilities and **UNKNOWN**.
+- The repository sends no form values to a backend. Ordinary asset requests still expose web-request metadata to the host. This is not a guarantee against a compromised same-origin script.
 - Dependency locking exists; current vulnerability status is **NOT VERIFIED** in this update. Earlier documents mentioned a dated audit; no continuous security scan or CI is configured.
 
 Risk ownership and unimplemented improvements are consolidated in [decisions](05-decisions.md#known-risks).
@@ -127,15 +125,13 @@ Risk ownership and unimplemented improvements are consolidated in [decisions](05
 | Integration | Protocol / data / configuration | Failure and operating limits |
 | --- | --- | --- |
 | Same-origin prompt assets | Unauthenticated GET of Markdown/JSON; paths from catalog; no form values sent | Non-2xx/parse/parity errors → retry state; host caching/rate limits unknown |
-| Tailwind browser CDN | HTTPS script `https://cdn.tailwindcss.com/3.4.17`; inline config in `index.html`; ordinary request metadata | Most utility layout/styles fail if unavailable; provider SLA/rate limits unknown |
-| Google Fonts | HTTPS CSS import in `src/style.css`, then font downloads; Inter, JetBrains Mono, Vazirmatn; ordinary metadata | Declared system-font fallbacks; provider SLA/rate limits unknown |
 | System clipboard | Browser `navigator.clipboard.writeText(output)`; legacy fallback; browser-controlled permission/context | Manual selection if copying fails; no remote service/auth/configuration |
 
 No AI, payment, identity, analytics, email, storage-service, or research-database integration exists.
 
 ## Runtime and deployment boundaries
 
-The browser loads the static shell, bundle, CSS/CDNs, restored state, and selected pair. A static host serves the Vite artifact at origin root; deploy procedure/configuration belongs in [development](04-development.md#deployment-and-operations).
+The browser loads the static shell, JavaScript/CSS bundles, restored state, and selected pair. A static host serves the Vite artifact at origin root; deploy procedure/configuration belongs in [development](04-development.md#deployment-and-operations).
 
 ```mermaid
 sequenceDiagram
@@ -166,4 +162,4 @@ sequenceDiagram
     M-->>U: System clipboard and toast
 ```
 
-Static hosting can scale asset delivery without shared server compute, but no CDN deployment or load testing is configured. Uncached templates and external resources need network access. Runtime CDN reliance, origin-root paths, globally unique cache IDs, and browser API availability are architectural constraints. **INFERRED:** Content/schema separation fits repeatable local transformation; historical decision reasoning remains unknown and is handled in [ADR entries](05-decisions.md#architecture-decisions).
+Static hosting can scale asset delivery without shared server compute, but no CDN deployment or load testing is configured. Uncached templates need network access to the host. Origin-root paths, globally unique cache IDs, and browser API availability are architectural constraints. **INFERRED:** Content/schema separation fits repeatable local transformation; historical decision reasoning remains unknown and is handled in [ADR entries](05-decisions.md#architecture-decisions).

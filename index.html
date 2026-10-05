@@ -1,42 +1,13 @@
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Build thoughtful, reusable AI prompts from guided templates." />
-    <meta name="theme-color" content="#f7f8f4" />
+    <meta name="theme-color" content="#ffffff" />
     <title>Prompt Studio — Turn ideas into better prompts</title>
-    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-    <script>
-      tailwind.config = {
-          darkMode: 'class',
-          theme: {
-            extend: {
-              colors: {
-                ink: '#18201c',
-                canvas: '#f6f7f2',
-                moss: {
-                  50: '#f1f8f4',
-                  100: '#dceee3',
-                  500: '#2f7d5a',
-                  600: '#256548',
-                  700: '#1f513c'
-                }
-              },
-              fontFamily: {
-                sans: ['Inter', 'Vazirmatn', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace']
-              },
-              boxShadow: {
-                soft: '0 18px 50px -28px rgba(24, 32, 28, 0.28)',
-                card: '0 1px 2px rgba(24, 32, 28, 0.04), 0 12px 32px -24px rgba(24, 32, 28, 0.3)'
-              }
-            }
-          }
-      }
-    </script>
   </head>
-  <body class="bg-canvas text-ink antialiased dark:bg-[#101512] dark:text-[#edf3ef]">
+  <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

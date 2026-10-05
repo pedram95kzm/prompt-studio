@@ -1,6 +1,6 @@
 # Decisions, unknowns, risks, and AI constraints
 
-Status: **Observed decisions and current constraints**. Last verified: **2026-10-03**.
+Status: **Observed decisions and current constraints**. Last verified: **2026-10-05**.
 
 ## Architecture decisions
 
@@ -70,14 +70,14 @@ Inherited entries describe choices visible in code, not historical approval. App
 - **Consequences:** IDs must be globally unique; no refresh policy, cancellation, or in-flight deduplication.
 - **Evidence/status:** `src/utils/loader.ts`; **active**.
 
-### ADR-008: Runtime styling resources
+### ADR-008: Bundled styling and system fonts
 
-- **Context/problem:** Provide utility styles and typography.
-- **Decision:** Tailwind browser CDN/inline config; Google Fonts resources.
-- **Alternatives:** Historical alternatives **UNKNOWN**.
-- **Reasoning:** Historical rationale unknown. A previous README reported a CDN request, without broader decision history.
-- **Consequences:** Runtime network/script trust, availability/CSP/deployment concerns; Tailwind utilities are not bundled by Vite.
-- **Evidence/status:** `index.html`, `src/style.css`; **active**.
+- **Context/problem:** The minimal interface needs consistent layout, controls, and typography.
+- **Decision:** Bundle native CSS through Vite and use system fonts. Remove the Tailwind browser script and Google Fonts import.
+- **Alternatives:** The previous interface used runtime Tailwind and Google Fonts resources.
+- **Reasoning:** A smaller visual system can be expressed directly in the app stylesheet.
+- **Consequences:** Styling no longer depends on third-party runtime requests; typography varies with the operating system.
+- **Evidence/status:** `index.html`, `src/style.css`; **updated 2026-10-05**.
 
 ### ADR-009: New workflows remain prompt content
 
@@ -97,6 +97,10 @@ Inherited entries describe choices visible in code, not historical approval. App
 - **Reasoning:** Explicit user-provided format; actual source/configuration remain authoritative.
 - **Consequences:** Product/requirements/features/glossary → overview; workflows → user guide; technical/security/integrations/data flow → architecture; setup/tests/deployment/configuration/support → development; decisions/AI context/risks → this document. Root links target the consolidated set.
 - **Evidence/status:** `docs/`, root `README.md`; **implemented 2026-10-03**.
+
+### ADR-011: Minimal interface (2026-10-05)
+
+The requested UI simplification replaces colorful collection badges, large template cards, numbered headings, readiness badges, and decorated preview surfaces with text navigation, a compact template list, neutral colors, and a plain preview. Required inputs appear first; optional inputs use **More context**, and mobile template selection uses a disclosure. Input edits clear generated output and disable Copy until regeneration. Template request IDs prevent outdated loads from replacing the selected form. The storage contract and template content remain compatible.
 
 ## Open questions
 
@@ -121,18 +125,15 @@ Inherited entries describe choices visible in code, not historical approval. App
 | Risk | Evidence / effect |
 | --- | --- |
 | Clear-text retention | Inputs survive restarts, are origin-script-readable, and lack global deletion/export/migration UI. |
-| Third-party runtime trust/availability | Tailwind has page privileges; no repository CSP/SRI; resource outages degrade appearance. |
-| Runtime validation/recovery gaps | Stored/schema objects are cast; quota/blocked writes can throw; trusted metadata enters HTML. |
-| Selection race | Async `selectTemplate()` lacks a latest-request guard; a slower old load can overwrite the current pair. Visible in code; not fixed here. |
+| Runtime validation/recovery gaps | Stored/schema objects are cast; quota/blocked writes can throw. |
 | Replacement metacharacters | String replacements interpret sequences such as `$&`; user text can change rather than reproduce literally. Later token passes can interpret tokens inserted by earlier fields. |
-| Stale preview | Field edits retain output until submission; copying can use old answers. |
 | Root-path/cache assumptions | Subpath hosting misses assets; duplicate IDs would collide in cache/storage. Current IDs are unique. |
 | Limited regression evidence | No maintained suite/CI; one-off checks do not cover all failures, accessibility, or real clipboard policies. |
 | Downstream interpretation | Exact optimization can be expensive; research sources may be unavailable; personality/fit conclusions remain provisional. Wording cannot enforce correctness. |
 
 ### Potential improvements (not implemented)
 
-Focused parser/generator/catalog checks in CI; literal-safe replacement and load-race handling; structural validation/storage recovery; retention controls; bundled styling or a host trust/header policy; subpath support; content evaluation/accessibility review. These are recommendations rather than current code or commitments.
+Focused parser/generator/catalog checks in CI; literal-safe replacement; structural validation/storage recovery; retention controls; a host trust/header policy; subpath support; content evaluation/accessibility review. These are recommendations rather than current code or commitments.
 
 ## Constraints an AI agent must respect
 
@@ -142,7 +143,7 @@ Focused parser/generator/catalog checks in CI; literal-safe replacement and load
 - Preserve optional-line semantics and universal language suffix unless intentionally changing the content contract.
 - Render user/generated text through text/value APIs. Trusted-content HTML is not permission to accept untrusted metadata.
 - Do not casually change storage key/payload, IDs, reset scope, origin-root paths, or cache identity; consider existing browser data.
-- Coordinate icon/color types and mappings, and language choices with RTL configuration.
+- Keep category icon/color metadata within its type contract, and coordinate language choices with RTL configuration.
 - Distinguish executed checks from assumptions. Do not assume a test/lint/CI framework or production environment.
 - Require settlement proof or explicit NOT PROVEN; greedy matching is not a minimum guarantee. Keep academic facts sourced and personal observations tentative.
 - Preserve topic/answer-adaptive follow-ups, waiting for replies, and a finite route to useful output.

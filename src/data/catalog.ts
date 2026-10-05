@@ -7,6 +7,29 @@ const prompt = (category: string, id: string) => ({
 
 export const categories: Category[] = [
   {
+    id: 'general',
+    title: 'General',
+    description: 'Solve everyday problems thoughtfully',
+    icon: 'sparkles',
+    color: 'green',
+    templates: [
+      {
+        id: 'split-expenses',
+        title: 'Split expenses fairly',
+        description: 'Work out who pays whom with the fewest transfers.',
+        tags: ['Expenses', 'Settlement', 'Dong', 'دونگ', 'دنگ'],
+        ...prompt('general', 'split-expenses'),
+      },
+      {
+        id: 'idea-discovery',
+        title: 'Discover an idea',
+        description: 'Start with a topic and explore ideas through tailored questions.',
+        tags: ['Ideas', 'Brainstorming', 'Questions', 'ایده'],
+        ...prompt('general', 'idea-discovery'),
+      },
+    ],
+  },
+  {
     id: 'coding',
     title: 'Coding',
     description: 'Ship cleaner, safer software',
@@ -47,29 +70,6 @@ export const categories: Category[] = [
         description: 'Document an existing codebase as a reliable knowledge base.',
         tags: ['Docs', 'Architecture', 'Knowledge base'],
         ...prompt('coding', 'generate-docs'),
-      },
-    ],
-  },
-  {
-    id: 'general',
-    title: 'General',
-    description: 'Solve everyday problems thoughtfully',
-    icon: 'sparkles',
-    color: 'green',
-    templates: [
-      {
-        id: 'split-expenses',
-        title: 'Split expenses fairly',
-        description: 'Work out who pays whom with the fewest transfers.',
-        tags: ['Expenses', 'Settlement', 'Dong', 'دونگ', 'دنگ'],
-        ...prompt('general', 'split-expenses'),
-      },
-      {
-        id: 'idea-discovery',
-        title: 'Discover an idea',
-        description: 'Start with a topic and explore ideas through tailored questions.',
-        tags: ['Ideas', 'Brainstorming', 'Questions', 'ایده'],
-        ...prompt('general', 'idea-discovery'),
       },
     ],
   },

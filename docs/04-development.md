@@ -1,10 +1,10 @@
 # Development, deployment, and troubleshooting
 
-Status: **VERIFIED repository/tooling**, with deployment unknowns marked. Last verified: **2026-10-03**.
+Status: **VERIFIED repository/tooling**, with deployment unknowns marked. Last verified: **2026-10-05**.
 
 ## Start contributing
 
-Prerequisites: npm, a modern browser, and Node.js compatible with the locked Vite engine: **20.19+ on the Node 20 line, or 22.12+**. The engine is recorded in `package-lock.json`. This update was checked with Node **24.15.0**, npm **10.9.2**, and Windows PowerShell. Installation needs npm-registry access; intended runtime styling needs the resources described in [architecture](03-architecture.md#apis-and-integrations).
+Prerequisites: npm, a modern browser, and Node.js compatible with the locked Vite engine: **20.19+ on the Node 20 line, or 22.12+**. The engine is recorded in `package-lock.json`. This update was checked with Node **24.15.0** and Windows PowerShell. Installation needs npm-registry access; runtime styling is bundled and uses system fonts.
 
 ```bash
 npm ci
@@ -25,10 +25,10 @@ No test, lint, format, or audit script is configured. Preview requires a build; 
 ## Repository map and configuration
 
 ```text
-index.html                  HTML shell and runtime Tailwind configuration
+index.html                  HTML shell, metadata, and module entry
 src/
   main.ts                   DOM/state/event orchestrator
-  style.css                 Custom CSS and Google Fonts import
+  style.css                 Bundled CSS, themes, and responsive layout
   data/catalog.ts           Category/template registration
   types/index.ts            Shared contracts and visual unions
   utils/parser.ts            Token and schema-key checks
@@ -49,12 +49,12 @@ tsconfig.app.json           Application type-check configuration
 | `tsconfig.json` | ES2022, ESNext modules, Bundler resolution, strict/unused/no-fallthrough checks, DOM libraries, no emit. |
 | `tsconfig.app.json` | Extends base; excludes `src/**/*.test.ts`, although none exist. |
 | `src/data/catalog.ts` | Categories, template metadata/tags, asset URLs. |
-| `src/types/index.ts` + `src/main.ts` | Closed icon/color unions and corresponding SVG/color mappings. |
+| `src/types/index.ts` + `src/data/catalog.ts` | Category metadata, including legacy icon/color unions. Navigation currently uses titles. |
 | `src/main.ts` | Languages, separate RTL set, storage key, initial selections, theme behavior. |
-| `index.html` + `src/style.css` | Tailwind theme/CDN URL, custom styles/font import. |
+| `index.html` + `src/style.css` | Metadata, bundled styles, color variables, and system-font stacks. |
 | Static host | Domain, TLS, MIME/caching/compression/security headers; no provider settings are committed. |
 
-Default category/template is Coding / Debug unless valid saved IDs exist. Language defaults to English. Theme uses saved state or OS color preference. Search/output begin empty. There are no application environment variables, credentials, secrets, feature flags, proxies, or mode-specific values. Development/production use the same catalog/resource paths; Vite handles its normal mode differences.
+General is the first category. Default category/template is General / Split expenses fairly unless valid saved IDs exist. Language defaults to English. Theme uses saved state or OS color preference. Search/output begin empty. There are no application environment variables, credentials, secrets, feature flags, proxies, or mode-specific values. Development/production use the same catalog/resource paths; Vite handles its normal mode differences.
 
 ## Development workflow
 
@@ -91,15 +91,27 @@ Additional context: {{context}}
 
 Strong prompts define a role, relevant inputs, useful output, uncertainty handling, and a practical method. Adaptive interviews should explicitly wait for answers, adapt questions to context, avoid repetitions, and reach a useful deliverable. Do not imply that instructions are enforced app logic or claim unperformed verification.
 
-### Add a category or visual variant
+### Add a category
 
-Add a nonempty `Category` entry and its assets. Reuse an existing variant or coordinate new values across `Category.icon`/`color`, `icons`, and `colorClasses()`. Check narrow navigation and the wide sidebar. Changing IDs affects saved selections and cache identity and needs an intentional compatibility decision.
+Add a nonempty `Category` entry and its assets. Supply valid `Category.icon`/`color` metadata for the type contract; the minimal navigation displays the category title. Check horizontal mobile navigation and the desktop template list. Changing IDs affects saved selections and cache identity and needs an intentional compatibility decision.
 
 ## Testing and validation
 
 No committed test framework/files, unit/integration/E2E suite, fixtures, coverage measurements, accessibility automation, or CI testing exists. Available repository checks are type checking and build. No coverage or conformance claim can be made.
 
-### Checks performed for this update
+### Minimal interface checks (2026-10-05)
+
+| Check | Result / scope |
+| --- | --- |
+| `npm run build` | **PASS**: strict TypeScript and Vite production build. |
+| One-off Playwright check in Chrome against Vite development server | **PASS**: all 22 forms loaded and generated prompts; required errors/focus; optional context; search; shortcuts; reset; Persian/RTL; theme/language/answer persistence; preview clearing after edits; latest-template selection during delayed loads. |
+| Native clipboard read-back | **PASS**: copied prompt matched preview text after normalizing Windows CRLF line endings. |
+| Responsive and visual checks | **PASS**: no horizontal page overflow at 320, 390, 768, 1024, or 1440 pixels; mobile selector and desktop resize behavior; inspected mobile and desktop light/dark screenshots. |
+| Assistive-technology conformance and downstream AI execution | **NOT VERIFIED**. |
+
+The browser profile and temporary Playwright installation were isolated from user storage and repository dependencies. No maintained test suite was added.
+
+### Checks recorded on 2026-10-03
 
 | Check | Result / scope |
 | --- | --- |
@@ -133,7 +145,7 @@ npm run preview
 
 `dist/` contains the HTML shell, hashed JavaScript/CSS under `assets/`, and copied `.md`/`.json` files under `prompts/`. Deploy it to a static host at the **origin root**. Root-absolute prompt URLs do not automatically honor a subpath/different Vite base. There are no client routes requiring history fallback.
 
-Preserve filenames/case, serve actual Markdown/JSON with appropriate content types, and avoid rewriting missing prompt assets to HTML. HTTPS supports transport integrity and clipboard behavior. Runtime CDN/font access remains necessary for intended styling.
+Preserve filenames/case, serve actual Markdown/JSON with appropriate content types, and avoid rewriting missing prompt assets to HTML. HTTPS supports transport integrity and clipboard behavior. Serve the bundled JavaScript/CSS assets; no external styling or font resources are required.
 
 | Topic | Current state |
 | --- | --- |
@@ -163,10 +175,10 @@ After publishing: load root with an empty cache, request a representative `.md`/
 | Unexpected optional-content loss | Empty tokens remove their full lines; separate content that must survive. |
 | Subpath prompt 404 | Paths target origin root; host there or intentionally change path handling. |
 | JSON URL returns HTML | Correct asset fallback/rewrite and missing path/file. |
-| Unstyled page / font fallback | Check CDN connectivity, CSP, extensions, console. |
+| Unstyled page | Check bundled CSS asset requests, host configuration, cache, and console. Fonts are supplied by the system. |
 | Invalid stored shape disrupts startup | Inspect/delete only `prompt-studio-state-v1` in browser storage and reload. |
 | Quota/blocked storage failure | Check storage restrictions/quota; writes lack recovery handling. |
-| Stale preview | Generate again after editing inputs. |
+| Preview clears after editing | Generate again to review and copy the updated prompt. |
 | Copy failure | Check secure context/browser policy; manually select text if fallback fails. |
 
 Database/auth troubleshooting is **NOT APPLICABLE**. Debug with browser Network, Application/Storage, DOM, and Accessibility tools; no application log service exists.

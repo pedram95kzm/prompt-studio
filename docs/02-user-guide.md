@@ -1,20 +1,20 @@
 # Using Prompt Studio
 
-Status: **VERIFIED interface and template workflows**. Last verified: **2026-10-03**.
+Status: **VERIFIED interface and template workflows**. Last verified: **2026-10-05**.
 
 Prompt Studio helps you prepare instructions for an AI tool. You answer a form, generate a prompt, and paste it into the AI tool you choose. Follow-up conversations and final answers happen in that tool.
 
 ## Getting started
 
 1. Open the application and choose a collection.
-2. Select a template card.
-3. Answer fields marked `*`; optional fields can stay empty.
+2. Select a template from the compact list. On mobile, open the **Template** selector to browse.
+3. Answer fields marked `*`; expand **More context** to add optional details.
 4. Choose **Response language**.
-5. Select **Generate prompt**, then review **Final prompt**.
+5. Select **Generate prompt**, then review **Your prompt**.
 6. Select **Copy** and paste into your chosen AI conversation.
-7. If you edit answers after generating, generate again before copying; field edits do not automatically refresh the existing preview.
+7. If you edit answers after generating, the preview clears and Copy is disabled until you generate again.
 
-Missing required answers are highlighted and the first invalid field receives focus. The readiness indicator tracks required completion, not answer quality.
+Missing required answers are highlighted and the first invalid field receives focus. Optional context opens automatically when it contains saved answers.
 
 ## Split shared expenses
 
@@ -72,13 +72,13 @@ For all collections and purposes, see [the catalog](01-overview.md#current-catal
 | Template unavailable | Use **Try again**. If it persists, contact the maintainer. |
 | Required-field error | Fill the highlighted answer and generate again. |
 | Copy fails | Allow clipboard access, use HTTPS/localhost, or select and copy preview text manually. |
-| Styling/fonts missing | Check connectivity or browser/network blocking of the external resources. |
+| Styling missing | Reload the page and check that the host serves the bundled CSS asset. Typography uses system fonts. |
 | Old answers return | Reset that template or clear the site's saved data. |
 | Output disappears | Generate again after changing templates/languages or refreshing. |
 
 ## Privacy, limitations, and FAQ
 
-**Where do my answers go?** They are processed locally and automatically retained in this browser's site storage. Avoid sensitive details on shared devices. The app loads third-party styles/fonts; the technical trust boundary is described in [security](03-architecture.md#security). Pasting a prompt into another service is a separate action governed by that service.
+**Where do my answers go?** They are processed locally and automatically retained in this browser's site storage. Avoid sensitive details on shared devices. The app uses bundled styles and system fonts; the technical trust boundary is described in [security](03-architecture.md#security). Pasting a prompt into another service is a separate action governed by that service.
 
 **Are generated answers saved?** Prompt Studio saves form values, not the generated output or an AI conversation. There is no account, shared history, or device synchronization.
 
